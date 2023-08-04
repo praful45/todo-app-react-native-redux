@@ -1,6 +1,10 @@
 import {createSlice, nanoid} from '@reduxjs/toolkit';
 
-const initialState = [];
+const initialState = {
+  todos: [],
+  mode: 'ADD',
+  editId: null,
+};
 
 export const todosSlice = createSlice({
   name: 'todos',
@@ -8,7 +12,7 @@ export const todosSlice = createSlice({
   reducers: {
     addTodos: {
       reducer(state, action) {
-        state.unshift(action.payload);
+        state.todos.unshift(action.payload);
       },
       prepare(title) {
         return {
@@ -22,21 +26,43 @@ export const todosSlice = createSlice({
     },
     toggleChecked: {
       reducer(state, action) {
-        const existingTodo = state.find(todo => todo.id === action.payload);
+        const existingTodo = state.todos.find(
+          todo => todo.id === action.payload,
+        );
         if (existingTodo) {
           existingTodo.checked = !existingTodo.checked;
         }
       },
     },
+    editTodos: {
+      reducer(state, action) {
+        const existingTodo = state.todos.find(
+          todo => todo.id === action.payload.editId,
+        );
+        if (existingTodo) {
+          existingTodo.title = action.payload.title;
+        }
+      },
+    },
     deleteTodos: {
       reducer(state, action) {
-        return state.filter(item => item.id !== action.payload);
+        const aftertodos = state.todos.filter(
+          item => item.id !== action.payload,
+        );
+        state.todos = [...aftertodos];
+      },
+    },
+    changeMode: {
+      reducer(state, action) {
+        state.mode = action.payload.mode;
+        state.editId = action.payload.id;
       },
     },
   },
 });
 
-export const getTodos = state => state.todos;
+export const getTodos = state => state.todos.todos;
 
-export const {addTodos, deleteTodos, toggleChecked} = todosSlice.actions;
+export const {addTodos, deleteTodos, toggleChecked, editTodos, changeMode} =
+  todosSlice.actions;
 export default todosSlice.reducer;
