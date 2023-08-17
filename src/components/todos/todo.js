@@ -1,10 +1,11 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {Image, Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {useDispatch} from 'react-redux';
 import {changeMode, deleteTodos, toggleChecked} from './todosSlice';
 
 export const TodoItem = ({item}) => {
+  const image = item.image;
   const dispatch = useDispatch();
 
   const handleDeleteTodo = id => {
@@ -24,6 +25,9 @@ export const TodoItem = ({item}) => {
         value={item.checked}
         onValueChange={() => handleToogleCheck(item.id)}
       />
+      {image && (
+        <Image source={{uri: image.path}} style={{width: 36, height: 36}} />
+      )}
       <Text style={styles.todo}>{item.title}</Text>
       <TouchableOpacity
         style={styles.edit}
@@ -57,6 +61,7 @@ const styles = StyleSheet.create({
   todo: {
     flex: 1,
     marginRight: 5,
+    marginLeft: 10,
   },
   btnTxt: {
     color: 'white',

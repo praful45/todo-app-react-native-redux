@@ -18,6 +18,7 @@ export const TodosList = ({}) => {
       renderItem={renderItem}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps={'always'} //for not closing the keyboard when pressed outside the input field
     />
   );
 };

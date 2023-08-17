@@ -14,12 +14,13 @@ export const todosSlice = createSlice({
       reducer(state, action) {
         state.todos.unshift(action.payload);
       },
-      prepare(title) {
+      prepare({title, image = null}) {
         return {
           payload: {
             id: nanoid(),
             title,
             checked: false,
+            image,
           },
         };
       },
@@ -41,6 +42,7 @@ export const todosSlice = createSlice({
         );
         if (existingTodo) {
           existingTodo.title = action.payload.title;
+          existingTodo.image = action.payload.image;
         }
       },
     },
@@ -58,11 +60,22 @@ export const todosSlice = createSlice({
         state.editId = action.payload.id;
       },
     },
+    deleteAllTodos: {
+      reducer(state, action) {
+        state.todos = [];
+      },
+    },
   },
 });
 
 export const getTodos = state => state.todos.todos;
 
-export const {addTodos, deleteTodos, toggleChecked, editTodos, changeMode} =
-  todosSlice.actions;
+export const {
+  addTodos,
+  deleteTodos,
+  toggleChecked,
+  editTodos,
+  changeMode,
+  deleteAllTodos,
+} = todosSlice.actions;
 export default todosSlice.reducer;
